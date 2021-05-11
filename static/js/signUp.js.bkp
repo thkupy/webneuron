@@ -1,0 +1,54 @@
+var str1 = "TST";
+var str2 = "INSIDE";
+var myplot;
+
+function respondCanvas(response, ctx) {
+    if (myplot instanceof Chart)
+    {
+        myplot.destroy()
+    }
+    console.log(str2);
+    myplot = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: response.t,
+            datasets: [{ 
+                data: response.Vm
+                label: "Vm",
+                borderColor: "#3e95cd",
+                fill: false
+                }
+            ]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Simulation Result'
+            },
+            responsive: false,
+            maintainAspectRatio: false
+        }
+        });
+}
+
+
+$(function(){
+        $('button').click(function(){
+                var user = $('#inputUsername').val();
+                var pass = $('#inputPassword').val();
+                $.ajax({
+                        url: '/signUpUser',
+                        data: $('form').serialize(),
+                        type: 'POST',
+                        success: function(response){
+                                console.log(response);
+                                ctx = $("#mychart")[0].getContext('2d');
+                                console.log(str1);
+                                respondCanvas(response,ctx);
+                        },
+                        error: function(error){
+                                console.log(error);
+                        }
+                });
+        });
+});
